@@ -9,9 +9,9 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>PromissinPro Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <!--<name>PromissinPro Maven Webapp</name>-->
+  <!--&lt;!&ndash; FIXME change it to the project's website &ndash;&gt;-->
+  <!--<url>http://www.example.com</url>-->
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -268,7 +268,7 @@
         <!--mybatis代码生成器-->
         <groupId>org.mybatis.generator</groupId>
         <artifactId>mybatis-generator-maven-plugin</artifactId>
-        <version>1.3.2</version>
+        <version>1.3.7</version>
         <configuration>
           <verbose>true</verbose>
           <overwrite>false</overwrite>

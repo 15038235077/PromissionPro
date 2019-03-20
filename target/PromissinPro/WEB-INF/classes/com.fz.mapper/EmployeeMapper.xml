@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fz.mapper.EmployeeMapper">
+  <resultMap id="BaseResultMap" type="com.fz.domain.Employee">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="inputtime" jdbcType="TIMESTAMP" property="inputtime" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="admin" jdbcType="BIT" property="admin" />
+    <result column="dep_id" jdbcType="BIGINT" property="depId" />
+    <association property="department" javaType="com.fz.domain.Department" columnPrefix="d_">
+      <result property="id" column="id"/>
+      <result property="name" column="name"/>
+    </association>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from employee
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fz.domain.Employee">
+   insert into employee (
+    id,
+    username,
+    password,
+    inputtime,
+    tel,
+    email,
+    status,
+    admin,
+    dep_id)
+    values (#{id}, #{username},#{password}, #{inputtime},
+      #{tel}, #{email}, #{status}, #{admin},
+      #{department.id})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.fz.domain.Employee">
+    update employee
+    set username = #{username,jdbcType=VARCHAR},
+      inputtime = #{inputtime,jdbcType=TIMESTAMP},
+      tel = #{tel,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      admin = #{admin,jdbcType=BIT},
+      dep_id = #{depId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, username, inputtime, tel, email, status, admin, dep_id
+    from employee
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+        select
+    e.id,
+    e.username,
+    e.inputtime,
+    e.tel,
+    e.email,
+    e.status,
+    e.admin,
+    d.id as d_id,
+    d.`name` as d_name
+    from employee as e
+    LEFT JOIN department as d
+    ON e.dep_id = d.id
+  </select>
+</mapper>
