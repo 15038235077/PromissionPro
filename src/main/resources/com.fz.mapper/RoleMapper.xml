@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fz.mapper.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.fz.domain.Role">
+    <id column="rid" jdbcType="BIGINT" property="rid" />
+    <result column="rnum" jdbcType="VARCHAR" property="rnum" />
+    <result column="rname" jdbcType="VARCHAR" property="rname" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from role
+    where rid = #{rid,jdbcType=BIGINT}
+  </delete>
+  <!--保存角色并获得主键-->
+  <insert id="insert" parameterType="com.fz.domain.Role" useGeneratedKeys="true" keyProperty="rid">
+    insert into role (rid, rnum, rname
+      )
+    values (#{rid,jdbcType=BIGINT}, #{rnum,jdbcType=VARCHAR}, #{rname,jdbcType=VARCHAR}
+      )
+  </insert>
+  <!--保存角色与权限之间的关系-->
+  <insert id="insertRoleAndPermissionRel">
+    insert into role_promission_rel(rid,pid) values (#{rid},#{pid})
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="com.fz.domain.Role">
+    update role
+    set rnum = #{rnum,jdbcType=VARCHAR},
+      rname = #{rname,jdbcType=VARCHAR}
+    where rid = #{rid,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select rid, rnum, rname
+    from role
+    where rid = #{rid,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select rid, rnum, rname
+    from role
+  </select>
+</mapper>

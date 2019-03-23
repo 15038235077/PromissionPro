@@ -3,6 +3,7 @@ package com.fz.web;
 import com.fz.domain.AjaxRes;
 import com.fz.domain.Employee;
 import com.fz.domain.PageListRes;
+import com.fz.domain.QueryVo;
 import com.fz.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +22,7 @@ public class EmployeeController {
 
     @Autowired
     private IEmployeeService employeeService;
-    private String username;
-    private String pasword;
+
     @RequestMapping("/employee")
     public String employee(){
         return "employee";
@@ -33,8 +33,8 @@ public class EmployeeController {
      */
     @RequestMapping("/employeeList")
     @ResponseBody
-    public PageListRes employeeList(){
-        PageListRes pageListRes= employeeService.getEmployee();
+    public PageListRes employeeList(QueryVo queryVo){
+        PageListRes pageListRes= employeeService.getEmployee(queryVo);
         System.out.println("11111111111");
         return pageListRes;
     }
@@ -60,6 +60,45 @@ public class EmployeeController {
             ajaxRes.setSuccess(false);
         }
         return ajaxRes;
+    }
+    /**
+     * 更新员工表单
+     */
+    @RequestMapping("/updateEmployee")
+    @ResponseBody
+    public AjaxRes updateEmployee(Employee employee){
+        System.out.println("come in");
 
+        AjaxRes ajaxRes = new AjaxRes();
+        try {
+            employeeService.updateEmployee(employee);
+            ajaxRes.setMsg("保存成功");
+            ajaxRes.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxRes.setMsg("保存失败");
+            ajaxRes.setSuccess(false);
+        }
+        return ajaxRes;
+    }
+
+    /**
+     * 接受离职请求
+     */
+    @RequestMapping("/updateState")
+    @ResponseBody
+    public AjaxRes updateState(Long id){
+        System.out.println(id);
+        AjaxRes ajaxRes = new AjaxRes();
+        try {
+            employeeService.updateState(id);
+            ajaxRes.setMsg("保存成功");
+            ajaxRes.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxRes.setMsg("保存失败");
+            ajaxRes.setSuccess(false);
+        }
+        return ajaxRes;
     }
 }

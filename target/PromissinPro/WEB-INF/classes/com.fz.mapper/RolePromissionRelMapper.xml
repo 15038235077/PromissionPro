@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fz.mapper.RolePromissionRelMapper">
+  <resultMap id="BaseResultMap" type="com.fz.domain.RolePromissionRel">
+    <id column="rid" jdbcType="BIGINT" property="rid" />
+    <id column="pid" jdbcType="BIGINT" property="pid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from role_promission_rel
+    where rid = #{rid,jdbcType=BIGINT}
+      and pid = #{pid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fz.domain.RolePromissionRel">
+    insert into role_promission_rel (rid, pid)
+    values (#{rid,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select rid, pid
+    from role_promission_rel
+  </select>
+</mapper>

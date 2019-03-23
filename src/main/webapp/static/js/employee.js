@@ -43,12 +43,12 @@ $(function () {
         toolbar: "#tb",
         onClickRow: function (rowIndex, rowData) {
             /*判断当前行是否是离职状态*/
-            if (!rowData.state) {
+            if (!rowData.status) {
                 /*离职,把离职按钮禁用*/
-                $("#delete").linkbutton("disable");
+                $("#del").linkbutton("disable");
             } else {
                 /*离职,把离职按钮启用*/
-                $("#delete").linkbutton("enable");
+                $("#del").linkbutton("enable");
             }
         }
     });
@@ -60,7 +60,7 @@ $(function () {
         buttons: [{
             text: '保存',
             handler: function () {
-
+                console.log("gggggggggggggggggggggg");
                 /*判断当前是添加 还是编辑*/
                 var id = $("[name='id']").val();
                 var url;
@@ -75,17 +75,8 @@ $(function () {
                 /*提交表单*/
                 $("#employeeForm").form("submit", {
                     url: url,
-                    onSubmit:function(param){
-                        /*获取选中的角色*/
-                        var values =  $("#role").combobox("getValues");
-                        for(var i = 0; i < values.length; i++){
-                            var rid  =  values[i];
-                            param["roles["+i+"].rid"] = rid;
-                        }
-                    },
                     success: function (data) {
                         data = $.parseJSON(data);
-                        console.log(data);
                         if (data.success) {
                             $.messager.alert("温馨提示", data.msg);
                             /*关闭对话框 */
@@ -101,6 +92,7 @@ $(function () {
         }, {
             text: '关闭',
             handler: function () {
+                console.log("111111111111111111111");
                 $("#dialog").dialog("close");
             }
         }]
@@ -195,30 +187,30 @@ $(function () {
         }
 
     });
-
-    /*选择角色下拉列表*/
-    $("#role").combobox({
-        width: 150,
-        panelHeight: 'auto',
-        editable: false,
-        url: 'roleList',
-        textField: 'rname',
-        valueField: 'rid',
-        multiple: true,
-        onLoadSuccess: function () { /*数据加载完毕之后回调*/
-            $("#role").each(function (i) {
-                var span = $(this).siblings("span")[i];
-                var targetInput = $(span).find("input:first");
-                if (targetInput) {
-                    $(targetInput).attr("placeholder", $(this).attr("placeholder"));
-                }
-            });
-        }
-    })
+    //
+    // /*选择角色下拉列表*/
+    // $("#role").combobox({
+    //     width: 150,
+    //     panelHeight: 'auto',
+    //     editable: false,
+    //     url: 'roleList',
+    //     textField: 'rname',
+    //     valueField: 'rid',
+    //     multiple: true,
+    //     onLoadSuccess: function () { /*数据加载完毕之后回调*/
+    //         $("#role").each(function (i) {
+    //             var span = $(this).siblings("span")[i];
+    //             var targetInput = $(span).find("input:first");
+    //             if (targetInput) {
+    //                 $(targetInput).attr("placeholder", $(this).attr("placeholder"));
+    //             }
+    //         });
+    //     }
+    // })
 
 
     /*设置离职按钮点击*/
-    $("#delete").click(function () {
+    $("#del").click(function () {
         /*获取当前选中的行*/
         var rowData = $("#dataGrade").datagrid("getSelected");
         console.log(rowData);
@@ -242,8 +234,6 @@ $(function () {
                 });
             }
         });
-
-
     });
     /*监听搜索按钮点击*/
     $("#searchbtn").click(function () {

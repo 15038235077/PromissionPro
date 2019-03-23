@@ -17,11 +17,12 @@
 <body>
 <%--工具栏--%>
 <div id="tb">
-
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" id="add">添加</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" id="edit">编辑</a>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" id="delete">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" id="del">离职</a>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" id="reload">刷新</a>
+    <input type="text" name="keyword" style="width: 200px; height: 30px; padding-left: 5px">
+    <a class="easyui-linkbutton" iconCls="icon-serach" id="searchbtn">查询</a>
 </div>
 <table id="dataGrade"></table>
 <%--对话框--%>
@@ -60,6 +61,7 @@
             </tr>
         </table>
     </form>
+
 </div>
 </body>
 </html>
