@@ -66,4 +66,14 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public void updateState(Long id) {
         employeeMapper.updateState(id);
     }
+
+    /**
+     * 根据用户名查询用户
+     * @param username
+     * @return
+     */
+    @Override
+    public Employee getEmployeeWithUserName(String username) {
+        return employeeMapper.getEmployeeWithUserName(username);
+    }
 }

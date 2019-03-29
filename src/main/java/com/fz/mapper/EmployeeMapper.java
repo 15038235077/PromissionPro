@@ -27,4 +27,6 @@ public interface EmployeeMapper {
      * @param rid
      */
     void insertEmployeeRoleRel(@Param("id") Long id, @Param("rid") Long rid);
+
+    Employee getEmployeeWithUserName(String username);
 }

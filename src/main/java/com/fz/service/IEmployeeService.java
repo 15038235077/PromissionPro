@@ -22,4 +22,6 @@ public interface IEmployeeService {
      * 更新员工状态
      */
     void updateState(Long id);
+
+    Employee getEmployeeWithUserName(String username);
 }

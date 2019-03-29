@@ -89,4 +89,7 @@
     <delete id="deleteRoleRel">
         delete from employee_role_rel where eid=#{id}
     </delete>
+    <select id="getEmployeeWithUserName" resultType="com.fz.domain.Employee">
+        select * from employee where username = #{username}
+    </select>
 </mapper>
