@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IPermissionService {
      List<Permission> getpermissions();
+
+    List<Permission> getPermissionByRid(Long rid);
 }

@@ -19,7 +19,7 @@
     delete from employee
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.fz.domain.Employee">
+    <insert id="insert" parameterType="com.fz.domain.Employee" useGeneratedKeys="true" keyProperty="id">
    insert into employee (
     id,
     username,
@@ -80,4 +80,13 @@
     <update id="updateState">
     update employee set status =  false where id = #{id};
   </update>
+    <!--保存员工与角色之间的关系-->
+    <insert id="insertEmployeeRoleRel">
+        insert into employee_role_rel(eid,rid) values (#{id},#{rid})
+    </insert>
+
+    <!--打破角色之间的关系-->
+    <delete id="deleteRoleRel">
+        delete from employee_role_rel where eid=#{id}
+    </delete>
 </mapper>

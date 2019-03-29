@@ -48,4 +48,48 @@ public class RoleServiceImpl implements IRoleService {
             roleMapper.insertRoleAndPermissionRel(role.getRid(), permission.getPid());
         }
     }
+
+    /**
+     * 更新角色
+     * @param role
+     */
+    @Override
+    public void updateRole(Role role) {
+        //先打破角色与权限之间的关系
+        roleMapper.deletePermissionRel(role.getRid());
+        //更新角色
+        roleMapper.updateByPrimaryKey(role);
+        //重新创建关系
+        for (Permission permission : role.getPermissions()) {
+            roleMapper.insertRoleAndPermissionRel(role.getRid(), permission.getPid());
+        }
+    }
+
+    /**
+     * 删除角色
+     * @param id
+     */
+    @Override
+    public void deleteRole(Long id) {
+        //删除所有关联权限关系
+        roleMapper.deletePermissionRel(id);
+        System.err.println(id);
+        //删除对应角色
+        roleMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 查询角色列表
+     * @return
+     */
+    @Override
+    public List<Role> roleList() {
+        return roleMapper.selectAll();
+    }
+
+    @Override
+    public List<Long> getRoleByEid(Long id) {
+        return roleMapper.getRoleByEid(id);
+    }
 }
+

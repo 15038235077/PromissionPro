@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 /**
  * @ClassName RoleController
  * @Description TODO
@@ -54,5 +56,51 @@ public class RoleController {
             ajaxRes.setSuccess(false);
         }
         return ajaxRes;
+    }
+
+    @RequestMapping("/updateRole")
+    @ResponseBody
+    public AjaxRes updateRole(Role role){
+        AjaxRes ajaxRes = new AjaxRes();
+        try {
+            roleService.updateRole(role);
+            ajaxRes.setMsg("更新角色成功");
+            ajaxRes.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxRes.setMsg("更新角色失败");
+            ajaxRes.setSuccess(false);
+        }
+        return ajaxRes;
+    }
+
+    @RequestMapping("/deleteRole")
+    @ResponseBody
+    public AjaxRes deleteRole(Long rid){
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println(rid);
+        AjaxRes ajaxRes = new AjaxRes();
+        try {
+            roleService.deleteRole(rid);
+            ajaxRes.setMsg("删除角色成功");
+            ajaxRes.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxRes.setMsg("删除角色失败");
+            ajaxRes.setSuccess(false);
+        }
+        return ajaxRes;
+    }
+
+    @RequestMapping("/roleList")
+    @ResponseBody
+    public List<Role> roleList(){
+        return roleService.roleList();
+    }
+
+    @RequestMapping("/getRoleByEid")
+    @ResponseBody
+    public List<Long> getRoleByEid(Long id){
+        return roleService.getRoleByEid(id);
     }
 }

@@ -75,6 +75,14 @@ $(function () {
                 /*提交表单*/
                 $("#employeeForm").form("submit", {
                     url: url,
+                    onSubmit: function (param) {
+                        /*获取选中的角色*/
+                        var values = $("#role").combobox("getValues");
+                        for (var i = 0; i < values.length; i++) {
+                            var rid = values[i];
+                            param["roles[" + i + "].rid"] = rid;
+                        }
+                    },
                     success: function (data) {
                         data = $.parseJSON(data);
                         if (data.success) {
@@ -130,10 +138,10 @@ $(function () {
         rowData["admin"] = rowData["admin"] + "";
         /*回显角色*/
         /*根据当前用户的id,查出对应的角色*/
-        // $.get("/getRoleByEid?id="+rowData.id,function (data) {
-        //     /*设置下拉列表数据回显*/
-        //     $("#role").combobox("setValues",data);
-        // });
+        $.get("/getRoleByEid?id="+rowData.id,function (data) {
+            /*设置下拉列表数据回显*/
+            $("#role").combobox("setValues",data);
+        });
         $("#dialog").dialog("setTitle", "编辑员工");
         $("#dialog").dialog("open");
         /*选中数据的回示*/
@@ -187,26 +195,26 @@ $(function () {
         }
 
     });
-    //
-    // /*选择角色下拉列表*/
-    // $("#role").combobox({
-    //     width: 150,
-    //     panelHeight: 'auto',
-    //     editable: false,
-    //     url: 'roleList',
-    //     textField: 'rname',
-    //     valueField: 'rid',
-    //     multiple: true,
-    //     onLoadSuccess: function () { /*数据加载完毕之后回调*/
-    //         $("#role").each(function (i) {
-    //             var span = $(this).siblings("span")[i];
-    //             var targetInput = $(span).find("input:first");
-    //             if (targetInput) {
-    //                 $(targetInput).attr("placeholder", $(this).attr("placeholder"));
-    //             }
-    //         });
-    //     }
-    // })
+    /*选择角色下拉列表*/
+    $("#role").combobox({
+        width: 150,
+        panelHeight: 'auto',
+        editable: false,
+        url: 'roleList',
+        textField: 'rname',
+        valueField: 'rid',
+        /*支持多选*/
+        multiple: true,
+        onLoadSuccess: function () { /*数据加载完毕之后回调*/
+            $("#role").each(function (i) {
+                var span = $(this).siblings("span")[i];
+                var targetInput = $(span).find("input:first");
+                if (targetInput) {
+                    $(targetInput).attr("placeholder", $(this).attr("placeholder"));
+                }
+            });
+        }
+    })
 
 
     /*设置离职按钮点击*/

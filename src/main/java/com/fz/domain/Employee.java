@@ -6,7 +6,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,5 +33,7 @@ public class Employee {
     private Boolean admin;
 
     private Department department;
+
+    private List<Role> roles = new ArrayList<>();
 
 }

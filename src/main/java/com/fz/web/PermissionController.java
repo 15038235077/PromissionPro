@@ -27,13 +27,21 @@ public class PermissionController {
      */
     @RequestMapping("/permissionList")
     @ResponseBody
-    public List<Permission> permissionList(){
+    public List<Permission> permissionList() {
         System.out.println("come in");
         List<Permission> getpermissions = permissionService.getpermissions();
-        for (Permission permission : getpermissions){
+        for (Permission permission : getpermissions) {
             System.out.println(permission.getPname());
             System.out.println(permission.getPresource());
         }
         return permissionService.getpermissions();
+    }
+
+    @RequestMapping("/getPermissionByRid")
+    @ResponseBody
+    public List<Permission> getPermissionByRid(Long rid) {
+        System.err.println(rid);
+        List<Permission> permissionList = permissionService.getPermissionByRid(rid);
+        return permissionList;
     }
 }

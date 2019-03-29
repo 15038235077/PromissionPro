@@ -31,4 +31,7 @@
     select pid, pname, presource
     from permission
   </select>
+  <select id="selectPermissionByRid" resultType="com.fz.domain.Permission">
+    select * from permission where pid in (SELECT pid from role_promission_rel where rid = #{rid});
+  </select>
 </mapper>

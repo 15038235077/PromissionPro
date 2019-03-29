@@ -33,7 +33,6 @@ $(function () {
                    /*保存*/
                    url="saveRole";
                }
-
                 /*提交表单*/
                 $("#myform").form("submit",{
                     url:url,
@@ -146,7 +145,6 @@ $(function () {
             $.messager.alert("提示","选择一行数据进行编辑");
             return;
         }
-
         /*加载当前角色下的权限*/
         var options =  $("#role_data2").datagrid("options");
         options.url = "/getPermissionByRid?rid="+rowData.rid;

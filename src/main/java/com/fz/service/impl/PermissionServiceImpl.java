@@ -24,4 +24,17 @@ public class PermissionServiceImpl implements IPermissionService {
         List<Permission> permissions = permissionMapper.selectAll();
         return permissions;
     }
+
+    /**
+     * 根据id查询所有权限
+     * @param rid
+     * @return
+     */
+    @Override
+    public List<Permission> getPermissionByRid(Long rid) {
+        List<Permission> permissionList = permissionMapper.selectPermissionByRid(rid);
+        return permissionList;
+    }
+
+
 }
