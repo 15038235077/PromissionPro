@@ -4,6 +4,7 @@ $(function () {
     })
     $('#tree').tree({
         url: "static/tree.json",
+        //  url: "/getTreeData",
         lines: true,
         onSelect: function (node) {
             /*在添加之前, 做判断  判断这个标签是否存在 */

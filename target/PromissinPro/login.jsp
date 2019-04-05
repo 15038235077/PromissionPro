@@ -50,7 +50,7 @@
                     <form>
                         <div class="lg-username input-item clearfix">
                             <i class="iconfont"></i>
-                            <input type="text" value="冯震" name="username" placeholder="请用户名">
+                            <input type="text" value="fz" name="username" placeholder="请用户名">
                         </div>
                         <div class="lg-password input-item clearfix">
                             <i class="iconfont"></i>

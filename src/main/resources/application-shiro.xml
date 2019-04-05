@@ -63,18 +63,17 @@
         <property name="hashIterations" value="2"></property>
     </bean>
 
-    <!--&lt;!&ndash; 缓存管理器 &ndash;&gt;-->
-    <!--<bean id="ehCache" class="org.apache.shiro.cache.ehcache.EhCacheManager">-->
-        <!--<property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml"/>-->
-    <!--</bean>-->
-
+    <!-- 缓存管理器 -->
+    <bean id="ehCache" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml"/>
+    </bean>
 
     <!-- 配置shiro安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <!--注入realm-->
         <property name="realm" ref="employeeRealm"/>
         <!--注入缓存-->
-        <!--<property name="cacheManager" ref="ehCache"/>-->
+        <property name="cacheManager" ref="ehCache"/>
     </bean>
 
     <!--

@@ -69,7 +69,7 @@ public class MyFormFilter extends FormAuthenticationFilter {
             } else if (name.equals(IncorrectCredentialsException.class.getName())){
                 ajaxRes.setMsg("密码错误");
             }else {
-                ajaxRes.setMsg("未知错误");
+                ajaxRes.setMsg("密码错误");
             }
         }
         try {
