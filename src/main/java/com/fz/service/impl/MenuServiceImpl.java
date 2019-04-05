@@ -14,6 +14,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -87,7 +88,7 @@ public class MenuServiceImpl implements IMenuService {
             menuMapper.deleteByPrimaryKey(id);
             ajaxRes.setMsg("删除成功");
             ajaxRes.setSuccess(true);
-        }catch (Exception e){
+        } catch (Exception e) {
             ajaxRes.setSuccess(false);
             ajaxRes.setMsg("删除失败");
             System.out.println(e);
@@ -103,13 +104,36 @@ public class MenuServiceImpl implements IMenuService {
         如果没有就从集合当中移除
         */
         /*获取用户 判断用户是否是管理员 是管理就不需要做判断*/
-//        Subject subject = SecurityUtils.getSubject();
-//        /*当前的用户*/
-//        Employee employee = (Employee)subject.getPrincipal();
-//        if (!employee.getAdmin()){
-//            /*做检验权限*/
-//            checkPermission(treeData);
-//        }
+        Subject subject = SecurityUtils.getSubject();
+        /*当前的用户*/
+        Employee employee = (Employee) subject.getPrincipal();
+        if (!employee.getAdmin()) {
+            /*做检验权限*/
+            checkPermission(treeData);
+        }
         return treeData;
+    }
+
+    public void checkPermission(List<Menu> menus) {
+        //获取主体
+        Subject subject = SecurityUtils.getSubject();
+        //遍历所有的菜单及子菜单
+        Iterator<Menu> iterator = menus.iterator();
+        while (iterator.hasNext()) {
+            Menu menu = iterator.next();
+            if (menu.getPermission() != null) {
+                //判断当前menu是否有权限对象,如果说没有 当前遍历的菜单从集合当中移除
+                String presource = menu.getPermission().getPresource();
+                if (!subject.isPermitted(presource)) {
+                    //当前遍历的菜单从集合当中移除
+                    iterator.remove();
+                    continue;
+                }
+            }
+            /*判断是否有子菜单  有子菜单也要做权限检验*/
+            if (menu.getChildren().size() > 0) {
+                checkPermission(menu.getChildren());
+            }
+        }
     }
 }
