@@ -4,6 +4,8 @@ import com.fz.domain.Employee;
 import com.fz.domain.PageListRes;
 import com.fz.domain.QueryVo;
 
+import java.util.List;
+
 public interface IEmployeeService {
     /**
      * 查询员工
@@ -24,4 +26,12 @@ public interface IEmployeeService {
     void updateState(Long id);
 
     Employee getEmployeeWithUserName(String username);
+    /**
+     * 根据用户查询角色
+     */
+    List<String> getRolesById(Long id);
+    /**
+     * 根据用户查询权限
+     */
+    List<String> getPermissionById(Long id);
 }

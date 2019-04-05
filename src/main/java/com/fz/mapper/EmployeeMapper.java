@@ -29,4 +29,18 @@ public interface EmployeeMapper {
     void insertEmployeeRoleRel(@Param("id") Long id, @Param("rid") Long rid);
 
     Employee getEmployeeWithUserName(String username);
+
+    /**
+     * 根据用户id查询角色编号名称
+     * @param id
+     * @return
+     */
+    List<String> getRolesById(Long id);
+
+    /**
+     * 根据用户id查询权限
+     * @param id
+     * @return
+     */
+    List<String> getPermissionById(Long id);
 }

@@ -72,14 +72,14 @@
 </div>
 <div class="login-ft">
     <div class="ft-inner">
-        <div class="about-us">
-            <a href="javascript:;">关于我们</a>
-            <a href="http://www.itlike.com/">撩课学院</a>
-            <a href="javascript:;">服务条款</a>
-            <a href="javascript:;">联系方式</a>
+        <div class="other-info">
+            <%--<a href="javascript:;">关于我们</a>--%>
+            <a href="https://github.com/15038235077/PromissionPro">源码地址</a>
+            <%--<a href="javascript:;">服务条款</a>--%>
+            <%--<a href="javascript:;">联系方式</a>--%>
         </div>
-        <div class="address"> 课程内容版权均归 撩课教育 所有 &nbsp;编号：210019&nbsp;&nbsp;Copyright&nbsp;©&nbsp;2019&nbsp;-&nbsp;2020&nbsp;撩课&nbsp;版权所有</div>
-        <div class="other-info">建议使用IE8及以上版本浏览器&nbsp;沪ICP备&nbsp;18036896号&nbsp;E-mail：itlike@126.com</div>
+        <div class="address"> Copyright&nbsp;©&nbsp;2019&nbsp;-&nbsp;future&nbsp;冯震&nbsp;版权所有</div>
+        <div class="other-info">E-mail：fengzhen@xdja.com</div>
     </div>
 </div>
 

@@ -13,7 +13,10 @@ import lombok.ToString;
  **/
 @Getter@Setter@ToString
 public class QueryVo {
+    //分页
     private int page;
+    //行数
     private int rows;
+    //关键字
     private String keyword;
 }

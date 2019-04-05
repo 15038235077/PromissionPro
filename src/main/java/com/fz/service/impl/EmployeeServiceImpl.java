@@ -8,6 +8,7 @@ import com.fz.mapper.EmployeeMapper;
 import com.fz.service.IEmployeeService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public void saveEmployee(Employee employee) {
+        //加密密码   加密数据   加密参考物  散列次数
+        Md5Hash md5Hash = new Md5Hash(employee.getPassword(), employee.getUsername(), 2);
+        employee.setPassword(md5Hash.toString());
+
         //添加员工
         employeeMapper.insert(employee);
         //保存角色关系表
@@ -75,5 +80,25 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public Employee getEmployeeWithUserName(String username) {
         return employeeMapper.getEmployeeWithUserName(username);
+    }
+
+    /**
+     * 根据用户id查询角色编号名称
+     * @param id
+     * @return
+     */
+    @Override
+    public List<String> getRolesById(Long id) {
+        return employeeMapper.getRolesById(id);
+    }
+
+    /**
+     * 根据用户id查询权限编号名称
+     * @param id
+     * @return
+     */
+    @Override
+    public List<String> getPermissionById(Long id) {
+        return employeeMapper.getPermissionById(id);
     }
 }
