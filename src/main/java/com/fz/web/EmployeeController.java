@@ -6,6 +6,9 @@ import com.fz.domain.Employee;
 import com.fz.domain.PageListRes;
 import com.fz.domain.QueryVo;
 import com.fz.service.IEmployeeService;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,9 @@ import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * @ClassName EmployeeController
@@ -57,9 +63,17 @@ public class EmployeeController {
     public AjaxRes saveEmployee(Employee employee) {
         System.out.println("2222222222222");
         System.out.println(employee.toString());
+        Employee employeeWithUserName = employeeService.getEmployeeWithUserName(employee.getUsername());
+        AjaxRes ajaxRes = new AjaxRes();
+        if (employeeWithUserName != null){
+            ajaxRes.setMsg("该用户已经存在");
+            ajaxRes.setSuccess(false);
+            return ajaxRes;
+        }
+        System.out.println("该用户不存在");
         System.out.println(employee.getUsername());
         System.out.println(employee.getPassword());
-        AjaxRes ajaxRes = new AjaxRes();
+
         try {
             employee.setStatus(true);
             employeeService.saveEmployee(employee);
@@ -135,5 +149,68 @@ public class EmployeeController {
         } else {
             response.sendRedirect("nopermission.jsp");
         }
+    }
+
+    @RequestMapping("/download")
+    @ResponseBody
+    public void download(HttpServletResponse response) {
+        try {
+            System.out.println("-------------download----------------");
+            //从数据库拉取数据
+            QueryVo queryVo = new QueryVo();
+            queryVo.setPage(1);
+            queryVo.setRows(100);
+            PageListRes res = employeeService.getEmployee(queryVo);
+            List<Employee> employees = (List<Employee>) res.getRows();
+            //写入excel
+            HSSFWorkbook sheets = new HSSFWorkbook();
+            HSSFSheet sheet = sheets.createSheet("员工数据");
+            //创建一行 表头
+            HSSFRow row = sheet.createRow(0);
+            row.createCell(0).setCellValue("编号");
+            row.createCell(1).setCellValue("用户名");
+            row.createCell(2).setCellValue("入职日期");
+            row.createCell(3).setCellValue("电话");
+            row.createCell(4).setCellValue("邮件");
+            row.createCell(5).setCellValue("是否管理员");
+            row.createCell(6).setCellValue("是否在职");
+            //取出每个员工
+            for (int i = 0; i < employees.size(); i++) {
+                Employee employee = employees.get(i);
+                HSSFRow rowData = sheet.createRow(i + 1);
+                rowData.createCell(0).setCellValue(employee.getId());
+                rowData.createCell(1).setCellValue(employee.getUsername());
+                if (employee.getInputtime() != null) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String format = simpleDateFormat.format(employee.getInputtime());
+                    rowData.createCell(2).setCellValue(format);
+                } else {
+                    rowData.createCell(2).setCellValue("");
+                }
+
+                rowData.createCell(3).setCellValue(employee.getTel());
+                rowData.createCell(4).setCellValue(employee.getEmail());
+                if (employee.getAdmin()){
+                    rowData.createCell(5).setCellValue("是");
+                }else {
+                    rowData.createCell(5).setCellValue("否");
+                }
+                if (employee.getStatus()){
+                    rowData.createCell(6).setCellValue("在职");
+                }else {
+                    rowData.createCell(6).setCellValue("离职");
+                }
+            }
+
+            //响应给浏览器
+            String fileName = new String("员工数据.xls".getBytes("utf-8"), "iso8859-1");
+            response.setHeader("content-Disposition", "attachment:filename=" + fileName);
+            sheets.write(response.getOutputStream());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

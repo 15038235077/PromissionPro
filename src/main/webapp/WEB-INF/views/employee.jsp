@@ -32,6 +32,10 @@
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" id="reload">刷新</a>
     <input type="text" name="keyword" style="width: 200px; height: 30px; padding-left: 5px">
     <a class="easyui-linkbutton" iconCls="icon-serach" id="searchbtn">查询</a>
+    <a class="easyui-linkbutton" iconCls="icon-edit" id="excelOut">导出</a>
+    <shiro:hasPermission name="employee:add">
+        <a class="easyui-linkbutton" iconCls="icon-edit" id="excelIn">导入</a>
+    </shiro:hasPermission>
 </div>
 <table id="dataGrade"></table>
 <%--对话框--%>
@@ -77,4 +81,14 @@
 
 </div>
 </body>
+<div id="excelUpload">
+    <form method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td><input type="file" name="excel" style="width: 180px; margin-top: 20px;margin-left: 5px"></td>
+                <td><a href="javascript:void(0);" id="downloadTml">下载模板</a></td>
+            </tr>
+        </table>
+    </form>
+</div>
 </html>

@@ -42,7 +42,9 @@ public class EmployeeRealm extends AuthorizingRealm {
         System.out.println("授权调用");
         Employee employee = (Employee) principals.getPrimaryPrincipal();
         //根据当前用户，进行查询角色和权限
+        if (employee.getAdmin()){
 
+        }
 
         List<String> roles = new ArrayList<>();
         List<String> permissions = new ArrayList<>();
@@ -50,6 +52,19 @@ public class EmployeeRealm extends AuthorizingRealm {
         System.out.println("roles   " + roles);
         permissions = employeeService.getPermissionById(employee.getId());
         System.out.println("permissions   " + permissions);
+        if (employee.getAdmin()){
+            permissions.clear();
+            permissions.add("employee:add");
+            permissions.add("employee:delete");
+            permissions.add("employee:edit");
+            permissions.add("employee:index");
+            permissions.add("role:index");
+            permissions.add("menu:index");
+        }
+        if (!employee.getStatus()){
+            roles.clear();
+            permissions.clear();
+        }
         //给授权信息
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addRoles(roles);
@@ -74,6 +89,9 @@ public class EmployeeRealm extends AuthorizingRealm {
         Employee employee = employeeService.getEmployeeWithUserName(username);
         System.out.println(employee);
         if (employee == null) {
+            return null;
+        }
+        if(!employee.getStatus()){
             return null;
         }
         //开始认证

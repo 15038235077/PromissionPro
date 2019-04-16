@@ -258,4 +258,22 @@ $(function () {
         $("#dataGrade").datagrid("load", {});
     });
 
+    // $("#excelUpload").dialog({
+    //     width:260,
+    //     height:180.
+    //     title:"导入Excel",
+    //     buttons:[{
+    //         text
+    //     }]
+    // })
+
+
+    $("#excelOut").click(function () {
+        window.open('/download')
+    });
+    $("#excelIn").click(function () {
+        window.open('/download')
+    });
+
+
 });
