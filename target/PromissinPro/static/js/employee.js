@@ -258,22 +258,48 @@ $(function () {
         $("#dataGrade").datagrid("load", {});
     });
 
-    // $("#excelUpload").dialog({
-    //     width:260,
-    //     height:180.
-    //     title:"导入Excel",
-    //     buttons:[{
-    //         text
-    //     }]
-    // })
+    $("#excelUpload").dialog({
+        width:260,
+        height:180,
+        title:"导入Excel",
+        buttons:[{
+            text:'保存',
+            handler:function(){
+                $("#uploadForm").form("submit", {
+                    url:"uploadExcelFile",
+                    success: function (data) {
+                        data = $.parseJSON(data);
+                        if (data.success) {
+                            $.messager.alert("温馨提示", data.msg);
+                            /*关闭对话框 */
+                            $("#dialog").dialog("close");
+                            /*重新加载数据表格*/
+                            $("#dataGrade").datagrid("reload");
+                        } else {
+                            $.messager.alert("温馨提示", data.msg);
+                        }
+                    }
+                })
+            }
+        },{
+            text:'关闭',
+            handler:function(){
+                $("#excelUpload").dialog("close");
+            }
+        }],
+        closed:true
+    })
 
 
     $("#excelOut").click(function () {
         window.open('/download')
     });
     $("#excelIn").click(function () {
-        window.open('/download')
+        $("#excelUpload").dialog("open");
     });
 
+    $("#downloadTml").click(function () {
+        window.open('/downloadTml');
+    })
 
 });

@@ -41,7 +41,9 @@
   <delete id="deletePermissionRel">
     delete from role_promission_rel where rid=#{rid}
   </delete>
-
+  <delete id="deleteEmployeeRel">
+    delete from employee_role_rel where rid=#{rid}
+  </delete>
   <select id="getRoleByEid" resultType="java.lang.Long">
       select rid from employee_role_rel where eid=#{id}
   </select>

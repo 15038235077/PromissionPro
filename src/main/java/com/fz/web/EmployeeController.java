@@ -2,13 +2,18 @@ package com.fz.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fz.domain.AjaxRes;
+import com.fz.domain.Department;
 import com.fz.domain.Employee;
 import com.fz.domain.PageListRes;
 import com.fz.domain.QueryVo;
 import com.fz.service.IEmployeeService;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +22,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -65,7 +74,7 @@ public class EmployeeController {
         System.out.println(employee.toString());
         Employee employeeWithUserName = employeeService.getEmployeeWithUserName(employee.getUsername());
         AjaxRes ajaxRes = new AjaxRes();
-        if (employeeWithUserName != null){
+        if (employeeWithUserName != null) {
             ajaxRes.setMsg("该用户已经存在");
             ajaxRes.setSuccess(false);
             return ajaxRes;
@@ -114,7 +123,7 @@ public class EmployeeController {
      */
     @RequestMapping("/updateState")
     @ResponseBody
-    @RequiresPermissions("employee:edit")
+    @RequiresPermissions("employee:delete")
     public AjaxRes updateState(Long id) {
         System.out.println(id);
         AjaxRes ajaxRes = new AjaxRes();
@@ -190,27 +199,109 @@ public class EmployeeController {
 
                 rowData.createCell(3).setCellValue(employee.getTel());
                 rowData.createCell(4).setCellValue(employee.getEmail());
-                if (employee.getAdmin()){
+                if (employee.getAdmin()) {
                     rowData.createCell(5).setCellValue("是");
-                }else {
+                } else {
                     rowData.createCell(5).setCellValue("否");
                 }
-                if (employee.getStatus()){
+                if (employee.getStatus()) {
                     rowData.createCell(6).setCellValue("在职");
-                }else {
+                } else {
                     rowData.createCell(6).setCellValue("离职");
                 }
             }
 
             //响应给浏览器
             String fileName = new String("员工数据.xls".getBytes("utf-8"), "iso8859-1");
-            response.setHeader("content-Disposition", "attachment:filename=" + fileName);
+            response.setHeader("content-Disposition", "attachment;filename=" + fileName);
             sheets.write(response.getOutputStream());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * 下载模板
+     */
+    @RequestMapping("downloadTml")
+    @ResponseBody
+    public void downloadTml(HttpServletRequest request, HttpServletResponse response) {
+        FileInputStream fileInputStream = null;
+        try {
+            String fileName = new String("EmployeeTml.xls".getBytes("utf-8"), "iso8859-1");
+            response.setHeader("content-Disposition", "attachment;filename=" + fileName);
+            /* 获取文件路径*/
+            String realPath = request.getSession().getServletContext().getRealPath("static/ExcelTml.xls");
+            fileInputStream = new FileInputStream(realPath);
+            //读入文件写到输出流中
+            IOUtils.copy(fileInputStream, response.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*配置文件解析器 */
+    @RequestMapping("/uploadExcelFile")
+    @ResponseBody
+    public AjaxRes uploadExcelFile(MultipartFile excel) {
+        AjaxRes ajaxRes = new AjaxRes();
+        try {
+            ajaxRes.setMsg("导入成功");
+            ajaxRes.setSuccess(true);
+            HSSFWorkbook sheets = new HSSFWorkbook(excel.getInputStream());
+            HSSFSheet sheet = sheets.getSheetAt(0);
+            //获取最大行号
+            int lastRowNum = sheet.getLastRowNum();
+     //       System.err.println(lastRowNum + "=-----------------------------");
+            Row employeeRow = null;
+            for (int i = 1; i <= lastRowNum; i++) {
+                employeeRow = sheet.getRow(i);
+                Employee employee = new Employee();
+                employee.setUsername(String.valueOf(getCellValue(employeeRow.getCell(0))));
+                employee.setPassword(String.valueOf(getCellValue(employeeRow.getCell(1))));
+                employee.setInputtime((Date) getCellValue(employeeRow.getCell(2)));
+                employee.setTel(String.valueOf(getCellValue(employeeRow.getCell(3))));
+                Department department = new Department();
+                department.setId((long) 1);
+                department.setName("技术部");
+                employee.setStatus(true);
+                employee.setAdmin(false);
+                employeeService.saveEmployee(employee);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ajaxRes.setMsg("导入失败");
+            ajaxRes.setSuccess(false);
+        }
+
+        return ajaxRes;
+    }
+
+    private Object getCellValue(Cell cell) {
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getRichStringCellValue().getString();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue();
+                } else {
+                    return cell.getNumericCellValue();
+                }
+            case BOOLEAN:
+                return cell.getBooleanCellValue();
+            case FORMULA:
+                return cell.getCellFormula();
+        }
+        return cell;
     }
 }

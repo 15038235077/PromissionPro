@@ -35,4 +35,6 @@ public interface RoleMapper {
      * @return
      */
     List<Long> getRoleByEid(Long id);
+
+    void deleteEmployeeRel(Long id);
 }

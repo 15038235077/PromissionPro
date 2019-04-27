@@ -82,10 +82,12 @@
 </div>
 </body>
 <div id="excelUpload">
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="uploadForm">
         <table>
             <tr>
                 <td><input type="file" name="excel" style="width: 180px; margin-top: 20px;margin-left: 5px"></td>
+            </tr>
+            <tr>
                 <td><a href="javascript:void(0);" id="downloadTml">下载模板</a></td>
             </tr>
         </table>

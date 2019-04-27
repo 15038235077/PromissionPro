@@ -74,6 +74,8 @@ public class RoleServiceImpl implements IRoleService {
         //删除所有关联权限关系
         roleMapper.deletePermissionRel(id);
         System.err.println(id);
+        //删除员工与角色之间的关系
+        roleMapper.deleteEmployeeRel(id);
         //删除对应角色
         roleMapper.deleteByPrimaryKey(id);
     }

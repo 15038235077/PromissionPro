@@ -24,21 +24,18 @@ import java.util.List;
  **/
 @Service
 @Transactional
-public class EmployeeServiceImpl implements IEmployeeService {
+public class EmployeeServiceImpl  implements IEmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
 
     @Override
     public PageListRes getEmployee(QueryVo vo) {
-
         Page<Object> page = PageHelper.startPage(vo.getPage(), vo.getRows());
         List<Employee> employees = employeeMapper.selectAll(vo);
-
         PageListRes pageListRes = new PageListRes();
         pageListRes.setTotal(page.getTotal());
         pageListRes.setRows(employees);
         return pageListRes;
-
     }
 
     @Override
@@ -46,7 +43,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
         //加密密码   加密数据   加密参考物  散列次数
         Md5Hash md5Hash = new Md5Hash(employee.getPassword(), employee.getUsername(), 2);
         employee.setPassword(md5Hash.toString());
-
         //添加员工
         employeeMapper.insert(employee);
         //保存角色关系表
